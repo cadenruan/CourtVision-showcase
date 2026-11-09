@@ -42,18 +42,6 @@ section > p{margin:0 0 24px;color:var(--soft);max-width:38em}
 .sees video{display:block;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px}
 .sees .note{margin:20px 0 0;max-width:38em}
 
-.flow{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;align-items:stretch}
-.flow li{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;font-weight:500;text-align:center}
-.flow li+li{margin-top:28px;position:relative}
-.flow li+li::before{content:"";position:absolute;left:50%;top:-22px;width:10px;height:10px;border-right:2px solid var(--ball);border-bottom:2px solid var(--ball);transform:translateX(-50%) rotate(45deg)}
-@media(min-width:760px){
-  .flow{flex-direction:row;align-items:stretch}
-  .flow li{display:flex;align-items:center;justify-content:center}
-  .flow li{flex:1}
-  .flow li+li{margin:0 0 0 30px}
-  .flow li+li::before{left:-23px;top:50%;transform:translateY(-50%) rotate(-45deg)}
-}
-
 footer{margin-top:96px;padding:28px 0 64px;border-top:1px solid var(--rule);color:var(--soft);font-size:15px}
 footer p{margin:0 0 6px;max-width:44em}
 footer a{color:var(--soft)}
@@ -81,16 +69,6 @@ footer a{color:var(--soft)}
     <p class="note">Four models do the looking, all running on a laptop: one finds the players and the ball, one finds the rim, one notices when the broadcast switches cameras, and one reads jersey numbers so the reel stays on the right player.</p>
   </section>
 
-  <section>
-    <h2>How it works</h2>
-    <ol class="flow">
-      <li>Watch the whole video</li>
-      <li>Find the plays</li>
-      <li>Pick the best ones</li>
-      <li>Cut to the song</li>
-      <li>Reframe for a phone</li>
-    </ol>
-  </section>
 </main>
 
 <footer>
