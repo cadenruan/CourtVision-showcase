@@ -4,89 +4,108 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CourtVision</title>
-<meta name="description" content="A program that turns a half-hour basketball highlight compilation into a 30-second vertical edit, cut on the beat.">
+<meta name="description" content="Basketball highlight reels, edited automatically: a long highlight video, a player and a song in, a 30-second vertical edit out.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#ffffff;--ink:#1c1d1f;--soft:#6b6f76;--rule:#e6e7e9}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--ink:#f2f2f3;--soft:#9a9ca1;--rule:#26272a}}
-:root[data-theme="dark"]{--bg:#000;--ink:#f2f2f3;--soft:#9a9ca1;--rule:#26272a}
+:root{--bg:#f4f5f7;--card:#ffffff;--ink:#1a1c21;--soft:#646a75;--rule:#e1e4e9;--ball:#e2620f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121418;--card:#1b1e24;--ink:#eceef2;--soft:#9aa0ab;--rule:#2a2e36;--ball:#f2803a}}
+:root[data-theme="dark"]{--bg:#121418;--card:#1b1e24;--ink:#eceef2;--soft:#9aa0ab;--rule:#2a2e36;--ball:#f2803a}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 "Hanken Grotesk",system-ui,sans-serif}
-a{color:inherit}
-.col{max-width:620px;padding:0 16px;margin:0 auto}
-@media(min-width:900px){.col{margin:0 0 0 8vw}}
-header{padding:64px 0 36px}
-h1{font-size:22px;font-weight:700;margin:0 0 10px;letter-spacing:-.01em}
-header p{margin:0;font-size:22px;line-height:1.4;letter-spacing:-.01em}
-header p+p{margin-top:14px;color:var(--soft);font-size:17px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "Hanken Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--ink);text-decoration-color:var(--ball);text-underline-offset:3px;text-decoration-thickness:2px}
+a:hover{color:var(--ball)}
+a:focus-visible,video:focus-visible{outline:2px solid var(--ball);outline-offset:3px}
 
-/* the wall: reels edge to edge, like a phone's gallery */
-.wall{display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
-@media(min-width:700px){.wall{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:1200px){.wall{grid-template-columns:repeat(6,1fr)}}
-.tile{position:relative;background:#000}
-.tile video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover}
-.tile .lbl{position:absolute;left:10px;right:10px;top:8px;display:flex;justify-content:space-between;
-  color:#fff;font-size:14px;font-weight:500;text-shadow:0 1px 6px rgba(0,0,0,.7);pointer-events:none;transition:opacity .2s}
-.tile.playing .lbl{opacity:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+@media(min-width:700px){.wrap{padding:0 32px}}
 
-section{padding:56px 0 0}
-h2{font-size:22px;font-weight:700;margin:0 0 12px;letter-spacing:-.01em}
-.wide{margin:0 0 20px}
-.wide video{display:block;width:100%;aspect-ratio:16/9;background:#000}
-@media(min-width:900px){.wide{max-width:1100px;margin:0 0 20px 8vw;padding-right:16px}}
-p{margin:0 0 14px}
-.soft{color:var(--soft)}
-ol{margin:0;padding-left:1.3em}
-ol li{margin:0 0 10px;padding-left:4px}
-ol b{font-weight:500}
-footer{padding:56px 0 64px;color:var(--soft);font-size:15px}
-footer p{margin:0 0 6px}
-a:focus-visible,video:focus-visible{outline:2px solid currentColor;outline-offset:3px}
-@media(prefers-reduced-motion:reduce){.tile .lbl{transition:none}}
+header{padding:72px 0 48px}
+.name{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;margin:0 0 28px}
+.name svg{width:22px;height:22px;flex:0 0 auto}
+h1{font-size:clamp(32px,5vw,48px);line-height:1.1;letter-spacing:-.02em;font-weight:700;margin:0 0 16px;max-width:16em}
+header p{margin:0;color:var(--soft);font-size:18px;max-width:34em}
+
+.reels{display:grid;gap:28px 20px;grid-template-columns:repeat(2,1fr)}
+@media(min-width:820px){.reels{grid-template-columns:repeat(3,1fr);gap:40px 28px}}
+.reel video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:#000;border-radius:12px}
+.reel .cap{display:flex;justify-content:space-between;gap:8px;margin-top:10px;font-size:15px}
+.reel .cap b{font-weight:500}
+.reel .cap span{color:var(--soft)}
+@media(max-width:480px){.reel .cap{flex-direction:column;gap:0}}
+
+section{margin-top:96px}
+h2{font-size:26px;letter-spacing:-.015em;font-weight:700;margin:0 0 12px}
+section > p{margin:0 0 24px;color:var(--soft);max-width:38em}
+
+.sees video{display:block;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px}
+.sees .note{margin:20px 0 0;max-width:38em}
+
+.steps{margin:0;padding:0;list-style:none;background:var(--card);border-radius:12px;border:1px solid var(--rule)}
+.steps li{display:grid;grid-template-columns:28px 1fr;gap:4px 14px;padding:16px 20px;border-top:1px solid var(--rule)}
+.steps li:first-child{border-top:0}
+.steps .n{color:var(--ball);font-weight:700}
+.steps b{font-weight:500}
+.steps span{color:var(--soft)}
+.steps span:last-child{grid-column:2}
+@media(min-width:700px){.steps span:last-child{grid-column:3}}
+@media(min-width:700px){.steps li{grid-template-columns:28px 220px 1fr}}
+
+footer{margin-top:96px;padding:28px 0 64px;border-top:1px solid var(--rule);color:var(--soft);font-size:15px}
+footer p{margin:0 0 6px;max-width:44em}
+footer a{color:var(--soft)}
 </style>
 </head>
 <body>
-<header class="col">
-  <h1>CourtVision</h1>
-  <p>I wrote a program that turns a half-hour highlight compilation into a 30-second vertical edit.</p>
-  <p>You give it a player and a song. It picks the plays, keeps the player in frame, and cuts on the beat. These six came straight out of it.</p>
+<div class="wrap">
+
+<header>
+  <p class="name">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="var(--ball)"/><g fill="none" stroke="var(--bg)" stroke-width="1.4"><path d="M1.5 12h21M12 1.5v21"/><path d="M5 4.5c3 2.2 4 4.8 4 7.5s-1 5.3-4 7.5M19 4.5c-3 2.2-4 4.8-4 7.5s1 5.3 4 7.5"/></g></svg>
+    CourtVision
+  </p>
+  <h1>Basketball highlight reels, edited automatically.</h1>
+  <p>Give it a long highlight video, a player and a song. It picks the plays, keeps the player in frame, and cuts a 30-second vertical edit on the beat.</p>
 </header>
 
-<div class="wall" id="wall"></div>
+<main>
+  <div class="reels" id="reels"></div>
 
-<section class="col">
-  <h2>What it's looking at</h2>
-  <p class="soft">The Derrick Rose reel with the tracking drawn on. Yellow is Rose, grey is everyone else, orange is the ball, blue is the rim. The green box is the part that ends up in the final cut.</p>
-</section>
-<div class="wide"><video controls playsinline preload="metadata" poster="assets/tracking-poster.jpg"><source src="reels/rose-tracking.mp4" type="video/mp4"></video></div>
-<div class="col">
-  <p>It runs four models, all on my laptop: one finds the players and the ball, one finds the rim, one catches the broadcast cutting to another camera, and one reads jersey numbers so the reel stays on the right player.</p>
-</div>
+  <section class="sees">
+    <h2>What it's looking at</h2>
+    <p>The Derrick Rose reel with the tracking drawn on. Yellow is Rose, grey is everyone else, orange is the ball and blue is the rim. Whatever's inside the green box makes the final cut.</p>
+    <video controls playsinline preload="metadata" poster="assets/tracking-poster.jpg"><source src="reels/rose-tracking.mp4" type="video/mp4"></video>
+    <p class="note">Four models do the looking, all running on a laptop: one finds the players and the ball, one finds the rim, one notices when the broadcast switches cameras, and one reads jersey numbers so the reel stays on the right player.</p>
+  </section>
 
-<section class="col">
-  <h2>How it works</h2>
-  <ol>
-    <li><b>Watch the whole video:</b> crowd noise, movement, every camera cut.</li>
-    <li><b>Find the plays:</b> who has the ball, when they shoot, whether it goes in.</li>
-    <li><b>Pick the best ones:</b> no repeats, nothing that runs across a camera cut.</li>
-    <li><b>Cut to the song:</b> every clip is a whole number of beats, and the biggest play lands on the drop.</li>
-    <li><b>Reframe for a phone:</b> the crop follows the player down the court.</li>
-  </ol>
-</section>
+  <section>
+    <h2>How it works</h2>
+    <p>Every reel above went through the same five steps, with no editing by hand.</p>
+    <ol class="steps">
+      <li><span class="n">1</span><b>Watch the whole video</b><span>Crowd noise, movement, every camera cut.</span></li>
+      <li><span class="n">2</span><b>Find the plays</b><span>Who has the ball, when they shoot, whether it goes in.</span></li>
+      <li><span class="n">3</span><b>Pick the best ones</b><span>No repeats, nothing that runs across a camera cut.</span></li>
+      <li><span class="n">4</span><b>Cut to the song</b><span>Each clip is a whole number of beats, and the biggest play lands on the drop.</span></li>
+      <li><span class="n">5</span><b>Reframe for a phone</b><span>The crop follows the player down the court.</span></li>
+    </ol>
+  </section>
+</main>
 
-<footer class="col">
-  <p>About 40,000 lines of Python. It runs offline, and the same video and song always give the same edit. Notes in <a href="METHOD.md">METHOD.md</a> and <a href="ARCHITECTURE.md">ARCHITECTURE.md</a>.</p>
-  <p>The footage and music belong to their owners; the reels are here as examples.</p>
-  <p><a href="https://github.com/cadenruan">cadenruan</a></p>
+<footer>
+  <p>About 40,000 lines of Python, run offline. The same video and song always give the same edit. More in <a href="METHOD.md">METHOD.md</a> and <a href="ARCHITECTURE.md">ARCHITECTURE.md</a>.</p>
+  <p>Footage and music belong to their owners; the reels are examples of what the program makes. By <a href="https://github.com/cadenruan">cadenruan</a>.</p>
 </footer>
+
+</div>
 <script>
-const R=[['ja','Ja Morant','0:34'],['edwards','Anthony Edwards','0:27'],['westbrook','Russell Westbrook','0:30'],['rose','Derrick Rose','0:21'],['williamson','Zion Williamson','0:26'],['cousins','DeMarcus Cousins','0:21']];
-wall.innerHTML=R.map(([k,n,d])=>`<div class="tile"><video controls playsinline preload="none" poster="assets/poster-${k}.jpg"><source src="reels/${k}.mp4" type="video/mp4"></video><div class="lbl"><span>${n}</span><span>${d}</span></div></div>`).join('');
-document.addEventListener('play',e=>{document.querySelectorAll('video').forEach(v=>{if(v!==e.target)v.pause()});e.target.parentElement.classList.add('playing')},true);
-document.addEventListener('pause',e=>e.target.parentElement.classList.remove('playing'),true);
+const R=[['ja','Ja Morant',10,'0:34'],['edwards','Anthony Edwards',9,'0:27'],['westbrook','Russell Westbrook',13,'0:30'],['rose','Derrick Rose',9,'0:21'],['williamson','Zion Williamson',8,'0:26'],['cousins','DeMarcus Cousins',7,'0:21']];
+document.getElementById('reels').innerHTML=R.map(([k,n,p,d])=>`
+  <div class="reel">
+    <video controls playsinline preload="none" poster="assets/poster-${k}.jpg"><source src="reels/${k}.mp4" type="video/mp4"></video>
+    <div class="cap"><b>${n}</b><span>${p} plays, ${d}</span></div>
+  </div>`).join('');
+document.addEventListener('play',e=>document.querySelectorAll('video').forEach(v=>{if(v!==e.target)v.pause()}),true);
 </script>
 </body>
 </html>
