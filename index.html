@@ -4,163 +4,89 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CourtVision</title>
-<meta name="description" content="Software that watches a half-hour basketball highlight video and cuts it down to a half-minute vertical edit, on beat with a song.">
+<meta name="description" content="A program that turns a half-hour basketball highlight compilation into a 30-second vertical edit, cut on the beat.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f3efe6; --paper:#faf7f0; --ink:#1d1b17; --dim:#6e685d; --line:#d9d2c3;
-  --orange:#d4561c;
-  --serif:"Instrument Serif",Georgia,serif;
-  --sans:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#15130f; --paper:#1d1a15; --ink:#ece6da; --dim:#9b9384; --line:#332e26; --orange:#f0753a;
-}}
-:root[data-theme="dark"]{
-  --bg:#15130f; --paper:#1d1a15; --ink:#ece6da; --dim:#9b9384; --line:#332e26; --orange:#f0753a;
-}
+:root{--bg:#ffffff;--ink:#1c1d1f;--soft:#6b6f76;--rule:#e6e7e9}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--ink:#f2f2f3;--soft:#9a9ca1;--rule:#26272a}}
+:root[data-theme="dark"]{--bg:#000;--ink:#f2f2f3;--soft:#9a9ca1;--rule:#26272a}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration-color:var(--orange);text-underline-offset:3px;text-decoration-thickness:1.5px}
-a:hover{color:var(--orange)}
-.page{max-width:1080px;margin:0 auto;padding:0 16px}
-@media(min-width:700px){.page{padding:0 32px}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 "Hanken Grotesk",system-ui,sans-serif}
+a{color:inherit}
+.col{max-width:620px;padding:0 16px;margin:0 auto}
+@media(min-width:900px){.col{margin:0 0 0 8vw}}
+header{padding:64px 0 36px}
+h1{font-size:22px;font-weight:700;margin:0 0 10px;letter-spacing:-.01em}
+header p{margin:0;font-size:22px;line-height:1.4;letter-spacing:-.01em}
+header p+p{margin-top:14px;color:var(--soft);font-size:17px}
 
-/* top */
-.top{display:grid;gap:18px;padding:56px 0 40px;border-bottom:1px solid var(--line)}
-@media(min-width:820px){.top{grid-template-columns:1.1fr 1fr;align-items:end;padding:88px 0 48px}}
-h1{font:400 clamp(64px,13vw,128px)/.85 var(--serif);letter-spacing:-.02em;margin:0}
-h1 i{color:var(--orange)}
-.top p{margin:0;max-width:40ch;font-size:17px;color:var(--dim)}
-.top p b{color:var(--ink);font-weight:500}
+/* the wall: reels edge to edge, like a phone's gallery */
+.wall{display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
+@media(min-width:700px){.wall{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1200px){.wall{grid-template-columns:repeat(6,1fr)}}
+.tile{position:relative;background:#000}
+.tile video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover}
+.tile .lbl{position:absolute;left:10px;right:10px;top:8px;display:flex;justify-content:space-between;
+  color:#fff;font-size:14px;font-weight:500;text-shadow:0 1px 6px rgba(0,0,0,.7);pointer-events:none;transition:opacity .2s}
+.tile.playing .lbl{opacity:0}
 
-/* section heads */
-.head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:56px 0 22px}
-h2{font:400 clamp(30px,4.6vw,40px)/1 var(--serif);margin:0}
-.aside{font:13px/1.4 var(--mono);color:var(--dim);white-space:nowrap}
-
-/* reels */
-.reels{display:grid;gap:28px 18px;grid-template-columns:repeat(2,1fr);margin:0;padding:0;list-style:none}
-@media(min-width:820px){.reels{grid-template-columns:repeat(3,1fr);gap:40px 24px}}
-.reel video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:#000;border-radius:4px}
-.reel .cap{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:10px;
-  border-top:1px solid var(--line);padding-top:8px}
-.reel .who{font-weight:600;font-size:15px}
-.reel .meta{font:12.5px var(--mono);color:var(--dim);white-space:nowrap}
-@media(max-width:480px){.reel .cap{flex-direction:column;gap:0}}
-
-/* what it sees */
-.sees{display:grid;gap:24px}
-@media(min-width:900px){.sees{grid-template-columns:2fr 1fr;gap:36px}}
-.sees video{display:block;width:100%;aspect-ratio:16/9;background:#000;border-radius:4px}
-.key{list-style:none;margin:0 0 18px;padding:0;font-size:14px;color:var(--dim);display:flex;flex-wrap:wrap;gap:4px 16px}
-@media(min-width:900px){.key{display:block}.key li{padding:3px 0}}
-.key li{display:flex;gap:8px;align-items:center}
-.key i{width:14px;height:3px;flex:0 0 auto}
-.sees p{margin:0 0 14px;font-size:15px}
-
-/* steps */
-.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
-@media(min-width:760px){.steps{grid-template-columns:repeat(5,1fr);border-top:1px solid var(--ink)}}
-.steps li{counter-increment:s;padding:16px 0;border-top:1px solid var(--line)}
-@media(min-width:760px){.steps li{border-top:0;padding:18px 18px 4px 0}
-  .steps li+li{padding-left:18px;border-left:1px solid var(--line)}}
-.steps li::before{content:counter(s);display:block;font:400 34px/1 var(--serif);color:var(--orange);margin-bottom:8px}
-.steps b{display:block;font-weight:600;margin-bottom:2px}
-.steps span{color:var(--dim);font-size:14.5px}
-.song{margin:22px 0 0;font-size:15px;color:var(--dim);max-width:62ch}
-
-footer{margin-top:72px;padding:22px 0 48px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;
-  justify-content:space-between;gap:10px 24px;font-size:13.5px;color:var(--dim)}
-footer p{margin:0;max-width:60ch}
+section{padding:56px 0 0}
+h2{font-size:22px;font-weight:700;margin:0 0 12px;letter-spacing:-.01em}
+.wide{margin:0 0 20px}
+.wide video{display:block;width:100%;aspect-ratio:16/9;background:#000}
+@media(min-width:900px){.wide{max-width:1100px;margin:0 0 20px 8vw;padding-right:16px}}
+p{margin:0 0 14px}
+.soft{color:var(--soft)}
+ol{margin:0;padding-left:1.3em}
+ol li{margin:0 0 10px;padding-left:4px}
+ol b{font-weight:500}
+footer{padding:56px 0 64px;color:var(--soft);font-size:15px}
+footer p{margin:0 0 6px}
+a:focus-visible,video:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.tile .lbl{transition:none}}
 </style>
 </head>
 <body>
-<div class="page">
-
-<header class="top">
-  <h1>Court<i>Vision</i></h1>
-  <p>You give it a half-hour highlight video, a player and a song. It picks the plays, follows
-  the player, and cuts a <b>half-minute vertical edit</b> on the beat. No hand edits in
-  anything below.</p>
+<header class="col">
+  <h1>CourtVision</h1>
+  <p>I wrote a program that turns a half-hour highlight compilation into a 30-second vertical edit.</p>
+  <p>You give it a player and a song. It picks the plays, keeps the player in frame, and cuts on the beat. These six came straight out of it.</p>
 </header>
 
-<main>
-  <div class="head">
-    <h2>Six reels</h2>
-    <span class="aside">sound on</span>
-  </div>
-  <ul class="reels" id="reels"></ul>
+<div class="wall" id="wall"></div>
 
-  <div class="head">
-    <h2>What it sees</h2>
-    <span class="aside">Derrick Rose, overlay on</span>
-  </div>
-  <div class="sees">
-    <video controls playsinline preload="metadata" poster="assets/tracking-poster.jpg">
-      <source src="reels/rose-tracking.mp4" type="video/mp4">
-    </video>
-    <div>
-      <ul class="key">
-        <li><i style="background:#969696"></i>everyone on court</li>
-        <li><i style="background:#ffdc00"></i>the player the reel is about</li>
-        <li><i style="background:#ff0000"></i>…when he slips out of frame</li>
-        <li><i style="background:#00eb00"></i>the vertical crop that ends up in the reel</li>
-        <li><i style="background:#ff8c00"></i>the ball</li>
-        <li><i style="background:#00dcff"></i>the rim</li>
-      </ul>
-      <p>Four models, all running locally on my laptop: one for people and the ball, one for the
-      rim, one that spots broadcast camera cuts, and one that reads jersey numbers so the reel
-      stays on the right guy.</p>
-    </div>
-  </div>
-
-  <div class="head">
-    <h2>How it gets there</h2>
-    <span class="aside">~40k lines of Python</span>
-  </div>
-  <ol class="steps">
-    <li><b>Watch everything</b><span>crowd noise, movement, every camera cut</span></li>
-    <li><b>Find the plays</b><span>who has the ball, when they shoot, whether it drops</span></li>
-    <li><b>Pick the best</b><span>no repeats, nothing that crosses a cut</span></li>
-    <li><b>Cut to the song</b><span>whole beats, the big basket on the drop</span></li>
-    <li><b>Reframe</b><span>the crop follows the player down the court</span></li>
-  </ol>
-  <p class="song">It runs offline on one machine, and the same video with the same song gives the
-  same edit, frame for frame. More detail in <a href="METHOD.md">METHOD.md</a> and
-  <a href="ARCHITECTURE.md">ARCHITECTURE.md</a>.</p>
-</main>
-
-<footer>
-  <p>Highlight footage cut to commercial music, shown as examples of what the software makes.</p>
-  <span><a href="https://github.com/cadenruan">cadenruan</a></span>
-</footer>
-
+<section class="col">
+  <h2>What it's looking at</h2>
+  <p class="soft">The Derrick Rose reel with the tracking drawn on. Yellow is Rose, grey is everyone else, orange is the ball, blue is the rim. The green box is the part that ends up in the final cut.</p>
+</section>
+<div class="wide"><video controls playsinline preload="metadata" poster="assets/tracking-poster.jpg"><source src="reels/rose-tracking.mp4" type="video/mp4"></video></div>
+<div class="col">
+  <p>It runs four models, all on my laptop: one finds the players and the ball, one finds the rim, one catches the broadcast cutting to another camera, and one reads jersey numbers so the reel stays on the right player.</p>
 </div>
+
+<section class="col">
+  <h2>How it works</h2>
+  <ol>
+    <li><b>Watch the whole video:</b> crowd noise, movement, every camera cut.</li>
+    <li><b>Find the plays:</b> who has the ball, when they shoot, whether it goes in.</li>
+    <li><b>Pick the best ones:</b> no repeats, nothing that runs across a camera cut.</li>
+    <li><b>Cut to the song:</b> every clip is a whole number of beats, and the biggest play lands on the drop.</li>
+    <li><b>Reframe for a phone:</b> the crop follows the player down the court.</li>
+  </ol>
+</section>
+
+<footer class="col">
+  <p>About 40,000 lines of Python. It runs offline, and the same video and song always give the same edit. Notes in <a href="METHOD.md">METHOD.md</a> and <a href="ARCHITECTURE.md">ARCHITECTURE.md</a>.</p>
+  <p>The footage and music belong to their owners; the reels are here as examples.</p>
+  <p><a href="https://github.com/cadenruan">cadenruan</a></p>
+</footer>
 <script>
-const REELS = [
-  ['ja','Ja Morant',10,34],
-  ['edwards','Anthony Edwards',9,27],
-  ['westbrook','Russell Westbrook',13,30],
-  ['rose','Derrick Rose',9,21],
-  ['williamson','Zion Williamson',8,26],
-  ['cousins','DeMarcus Cousins',7,21],
-];
-document.getElementById('reels').innerHTML = REELS.map(([k,who,plays,secs])=>`
-  <li class="reel">
-    <video controls playsinline preload="none" poster="assets/poster-${k}.jpg">
-      <source src="reels/${k}.mp4" type="video/mp4">
-    </video>
-    <div class="cap"><span class="who">${who}</span><span class="meta">${plays} plays · 0:${secs}</span></div>
-  </li>`).join('');
-// one video at a time
-document.addEventListener('play', e=>{
-  document.querySelectorAll('video').forEach(v=>{ if(v!==e.target && !v.paused) v.pause(); });
-}, true);
+const R=[['ja','Ja Morant','0:34'],['edwards','Anthony Edwards','0:27'],['westbrook','Russell Westbrook','0:30'],['rose','Derrick Rose','0:21'],['williamson','Zion Williamson','0:26'],['cousins','DeMarcus Cousins','0:21']];
+wall.innerHTML=R.map(([k,n,d])=>`<div class="tile"><video controls playsinline preload="none" poster="assets/poster-${k}.jpg"><source src="reels/${k}.mp4" type="video/mp4"></video><div class="lbl"><span>${n}</span><span>${d}</span></div></div>`).join('');
+document.addEventListener('play',e=>{document.querySelectorAll('video').forEach(v=>{if(v!==e.target)v.pause()});e.target.parentElement.classList.add('playing')},true);
+document.addEventListener('pause',e=>e.target.parentElement.classList.remove('playing'),true);
 </script>
 </body>
 </html>
