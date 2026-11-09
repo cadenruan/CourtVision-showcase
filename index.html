@@ -42,15 +42,17 @@ section > p{margin:0 0 24px;color:var(--soft);max-width:38em}
 .sees video{display:block;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px}
 .sees .note{margin:20px 0 0;max-width:38em}
 
-.steps{margin:0;padding:0;list-style:none;background:var(--card);border-radius:12px;border:1px solid var(--rule)}
-.steps li{display:grid;grid-template-columns:28px 1fr;gap:4px 14px;padding:16px 20px;border-top:1px solid var(--rule)}
-.steps li:first-child{border-top:0}
-.steps .n{color:var(--ball);font-weight:700}
-.steps b{font-weight:500}
-.steps span{color:var(--soft)}
-.steps span:last-child{grid-column:2}
-@media(min-width:700px){.steps span:last-child{grid-column:3}}
-@media(min-width:700px){.steps li{grid-template-columns:28px 220px 1fr}}
+.flow{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;align-items:stretch}
+.flow li{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;font-weight:500;text-align:center}
+.flow li+li{margin-top:28px;position:relative}
+.flow li+li::before{content:"";position:absolute;left:50%;top:-22px;width:10px;height:10px;border-right:2px solid var(--ball);border-bottom:2px solid var(--ball);transform:translateX(-50%) rotate(45deg)}
+@media(min-width:760px){
+  .flow{flex-direction:row;align-items:stretch}
+  .flow li{display:flex;align-items:center;justify-content:center}
+  .flow li{flex:1}
+  .flow li+li{margin:0 0 0 30px}
+  .flow li+li::before{left:-23px;top:50%;transform:translateY(-50%) rotate(-45deg)}
+}
 
 footer{margin-top:96px;padding:28px 0 64px;border-top:1px solid var(--rule);color:var(--soft);font-size:15px}
 footer p{margin:0 0 6px;max-width:44em}
@@ -81,13 +83,12 @@ footer a{color:var(--soft)}
 
   <section>
     <h2>How it works</h2>
-    <p>Every reel above went through the same five steps, with no editing by hand.</p>
-    <ol class="steps">
-      <li><span class="n">1</span><b>Watch the whole video</b><span>Crowd noise, movement, every camera cut.</span></li>
-      <li><span class="n">2</span><b>Find the plays</b><span>Who has the ball, when they shoot, whether it goes in.</span></li>
-      <li><span class="n">3</span><b>Pick the best ones</b><span>No repeats, nothing that runs across a camera cut.</span></li>
-      <li><span class="n">4</span><b>Cut to the song</b><span>Each clip is a whole number of beats, and the biggest play lands on the drop.</span></li>
-      <li><span class="n">5</span><b>Reframe for a phone</b><span>The crop follows the player down the court.</span></li>
+    <ol class="flow">
+      <li>Watch the whole video</li>
+      <li>Find the plays</li>
+      <li>Pick the best ones</li>
+      <li>Cut to the song</li>
+      <li>Reframe for a phone</li>
     </ol>
   </section>
 </main>
